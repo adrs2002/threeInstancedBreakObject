@@ -3,9 +3,7 @@
 # THREE.InstancedBreakObject
 Instanced and break shading object for three.js.
 
-
-![tumb]('https://raw.githubusercontent.com/adrs2002/threeInstancedBreakObject/master/content/tumb.png' "tumb")
-
+![sample](content/tumb.png)  
 ====
 
 # Overview
