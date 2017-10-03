@@ -69,7 +69,7 @@ breakObject = new THREE.InstancedBreakObject(mesh, { makeCount : 100, positions 
 
 begin Break animation
 
- PropertyName| type | defaultValue |  description  
+ PropertyName | type | defaultValue |  description  
   --- | --- | --- |  ---  
 | **id** | `int` | *0* | Specify the array ID of the object to be crushed. |  
 | **force** | `bool` | *false* | Whether to force animation to occur or not. If true, play crush animation from scratch. If it is false, if animation has already been finished or hidden, crush animation will not be performed. |  
@@ -82,8 +82,8 @@ breakObject.beginBreak({id:0});
 
 Confirm collisions with Ray.The IDs of all arrays that detected the collision and collision points are returned.
 
- PropertyName| type | description  
-  --- | --- | --- |  ---  
+ PropertyName | type | description  
+  --- | --- | --- 
 | **id** | `int` | detected array id |  
 | **o** | `Vector3` | collision points |  
 
@@ -103,8 +103,8 @@ const refs = breakObject.checkHits(ray);
 
 Confirm collision with Ray.The ID of the nearest array and the collision point are returned when collision is detected.
 
- PropertyName| type | description  
-  --- | --- | --- |  ---  
+ PropertyName | type | description  
+  --- | --- | --- 
 | **id** | `int` | detected array id |  
 | **o** | `Vector3` | collision points |  
 
