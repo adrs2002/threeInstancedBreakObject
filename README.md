@@ -3,6 +3,9 @@
 # THREE.InstancedBreakObject
 Instanced and break shading object for three.js.
 
+
+![tumb]('https://raw.githubusercontent.com/adrs2002/threeInstancedBreakObject/master/content/tumb.png' "tumb")
+
 ====
 
 # Overview
@@ -71,8 +74,7 @@ begin Break animation
  PropertyName| type | defaultValue |  description  
   --- | --- | --- |  ---  
 | **id** | `int` | *0* | Specify the array ID of the object to be crushed. |  
-| **force** | `bool` | *false* | 
-Whether to force animation to occur or not. If true, play crush animation from scratch. If it is false, if animation has already been finished or hidden, crush animation will not be performed. |  
+| **force** | `bool` | *false* | Whether to force animation to occur or not. If true, play crush animation from scratch. If it is false, if animation has already been finished or hidden, crush animation will not be performed. |  
 
 ```
 breakObject.beginBreak({id:0});

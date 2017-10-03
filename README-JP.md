@@ -5,6 +5,8 @@
 # Overview これは何？
 Three.js用の追加クラス。指定した３Dオブジェクト（mesh,geometry）を、インスタンス化し、シェーダー上で「砕ける」表現を行います。 
 
+![tumb]('https://raw.githubusercontent.com/adrs2002/threeInstancedBreakObject/master/content/tumb.png' "tumb")
+
 ## Demo
 
 * [demo](http://adrs2002.com/sandbox/breakshader/index.html)
