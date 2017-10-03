@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja" manifest="app.appcache">
+
+<head>
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <style>
+  /* loader from https://projects.lukehaas.me/css-loaders/  */
+ .loader, .loader:after, .loader:before { border-radius: 50%; width: 2.5em; height: 2.5em; -webkit-animation: load7 1.8s
+infinite ease-in-out; animation: load7 1.8s infinite ease-in-out } .loader { font-size: 10px; margin: 80px auto; position:
+relative; text-indent: -9999em; -webkit-transform: translateZ(0); transform: translateZ(0); -webkit-animation-delay: -.16s;
+animation-delay: -.16s } .loader:after, .loader:before { content: ''; position: absolute; top: 0 } .loader:before { left:
+-3.5em; -webkit-animation-delay: -.32s; animation-delay: -.32s } .loader:after { left: 3.5em } @-webkit-keyframes load7 {
+0%, 100%, 80% { box-shadow: 0 2.5em 0 -1.3em } 40% { box-shadow: 0 2.5em 0 0 } } @keyframes load7 { 0%, 100%, 80% { box-shadow:
+0 2.5em 0 -1.3em } 40% { box-shadow: 0 2.5em 0 0 } } .loader { color: #2CC939; } body { background-color: #000000; }
+
+  </style>
+</head>
+
+<body onContextmenu="return false">
+  <link rel="stylesheet" type="text/css" href="css/normalize.css">
+  <div class="viewdiv" id="viewdiv">
+    <div class="center_wapper" id="loader_d">
+      <div class="loader">Loading...</div>
+      <div style="margin-top:4em;" id="load_info">xxx %</div>
+    </div>
+  </div>
+  <div class="modalWapper" id="modalWapper">
+    <div class="center_wapper" id="modal_d">
+    </div>
+  </div>
+  <script src="js/three.min.js"></script>
+  <script src="js/OrbitControls.js"></script>
+  <script src="js/XLoader.js"></script>
+
+  <!-- step 1. add breakShader file link -->
+  <script src="threeBreakShader.js"></script>
+  <script>
+
+  var container, stats, controls;
+  var camera, scene, renderer;
+  var clock = new THREE.Clock();
+  var mixers = [];
+  var manager = null;
+  var Texloader = null;
+
+  var d = new Date();
+  var LastDateTime = null;
+
+  var onProgress = function(xhr) {
+    if (xhr.lengthComputable) {
+      var percentComplete = xhr.loaded / xhr.total * 100;
+    }
+  };
+  var onError = function(xhr) {};
+
+  var breakObject = null;
+
+  init();
+
+  function init() {
+
+    LastDateTime = Date.now();
+
+    container = document.getElementById('viewdiv');
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 5000);
+    scene = new THREE.Scene();
+    scene.add(new THREE.AmbientLight(0xaaaaaa));
+
+    // model
+    manager = new THREE.LoadingManager();
+    manager.onProgress = function(item, loaded, total) {
+      console.log(item, loaded, total);
+    };
+    Texloader = new THREE.TextureLoader();
+    
+    renderer = new THREE.WebGLRenderer({
+      alpha: true
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0xffffff, 0);
+    container.appendChild(renderer.domElement);
+
+    camera.up.set(0, 1, 0);
+    camera.position.set(0, 10, 50);
+    camera.lookAt(0, 0, 0);
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 00, 0);
+    controls.update();
+
+    var light = new THREE.AmbientLight(0xffffff);
+    scene.add(light);
+
+    window.addEventListener('resize', onWindowResize, false);
+    animate();
+
+    //download Model file
+    modelLoad();
+
+  }
+
+
+  function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  // main loop 
+  function animate() {
+
+    requestAnimationFrame(animate);
+    var nowTime = Date.now();
+    var dulTime = nowTime - LastDateTime;
+    LastDateTime = nowTime;
+
+    controls.update();
+    
+    // update break object timer
+    if(breakObject){ breakObject.beginBreak(); }
+
+    renderer.render(scene, camera);
+  }
+
+
+  function modelLoad() {
+    var loader = new THREE.XLoader(manager, Texloader, true);
+
+    // any model object load
+    loader.load(['content/tank_1.x', true, true], function(object) {
+      if (object.FrameInfo && object.FrameInfo.length > 0) { 
+
+        // ↓　this is main. break object set.
+        breakObject = new THREE.InstancedBreakObject(object.FrameInfo[0], { autoHidden : false });
+        scene.add(breakObject);
+
+        document.getElementById('loader_d').style.display = 'none';
+      }
+      object = null;
+    }, onProgress, onError);
+
+  }
+
+  </script>
+</body>
+
+</html>
